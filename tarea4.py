@@ -118,12 +118,17 @@ def tiro_al_blanco(p):
                 p_tiro = []
                 sem_tiro.release()
 
-def parque(p):
+def parque(i):
+    p = Persona(i+1)
     juego = zona_comun(p)
     if juego == "montaña rusa":
         montana_rusa(p)
 
 if __name__ == '__main__':
+
+    for i in range(150):
+        threads.append(thrd.Thread(target=parque, args=(i,)))
+
 
     sem_zona = thrd.BoundedSemaphore(150)
     sem_montana = thrd.BoundedSemaphore(10)
