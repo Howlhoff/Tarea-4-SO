@@ -157,6 +157,7 @@ def parque(i):
         tiro_al_blanco(p)
 
     textsalida.append(p.nombre+", "+datetime.now().time())
+    return 1
     
     
     
