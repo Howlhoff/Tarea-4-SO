@@ -40,7 +40,7 @@ def zona_comun(p):
     global textzonacomun
     sem_zona.acquire()
     juego = p.eleccion()
-    textzonacomun.append(p.nombre+", "+datetime.now().time()+", "+juego+", ")
+    textzonacomun.append(p.nombre+", "+datetime.now().strftime("%H:%M:%S")+", "+juego+", ")
     return juego
 
 
@@ -59,7 +59,7 @@ def montana_rusa(p):
                 lock0.release()
                 while(len(p_montana)>=10):
                     sem_montana.acquire()
-                textmontana.append(p.nombre+", "+t_fila+", "+datetime.now().time())
+                file2.write(p.nombre+", "+t_fila+", "+datetime.now().strftime("%H:%M:%S"))
                 p_montana.append(p)
                 time.sleep(5)
                 p_montana = []
@@ -82,7 +82,7 @@ def casa_terrorifica(p):
                 lock1.release()
                 while(len(p_casa)>=2):
                     sem_casa.acquire()
-                textcasa.append(p.nombre+", "+t_fila+", "+datetime.now().time())
+                textcasa.append(p.nombre+", "+t_fila+", "+datetime.now().strftime("%H:%M:%S"))
                 p_casa.append(p)
                 time.sleep(3)
                 p_casa = []
@@ -103,7 +103,7 @@ def barco_pirata(p):
                 lock2.release()
                 while(len(p_barco)>=5):
                     sem_barco.acquire()
-                textbarco.append(p.nombre+", "+t_fila+", "+datetime.now().time())
+                textbarco.append(p.nombre+", "+t_fila+", "+datetime.now().strftime("%H:%M:%S"))
                 p_barco.append(p)
                 time.sleep(7)
                 p_barco = []
@@ -125,7 +125,7 @@ def tiro_al_blanco(p):
                 lock3.release()
                 while(len(p_tiro)>=1):
                     sem_tiro.acquire()
-                textblanco.append(p.nombre+", "+t_fila+", "+datetime.now().time())
+                textblanco.append(p.nombre+", "+t_fila+", "+datetime.now().strftime("%H:%M:%S"))
                 p_tiro.append(p)
                 time.sleep(7)
                 p_tiro = []
@@ -163,6 +163,12 @@ def parque(i):
     
 
 if __name__ == '__main__':
+    file1 = open("ZonaComun.txt","w")
+    file2 = open("MontanaRusa.txt","w")
+    file3 = open("CasaTerror.txt","w")
+    file4 = open("BarcoPirata.txt","w")
+    file5 = open("TiroBlanco.txt","w")
+    file6 = open("Salida.txt","w")
 
 
     sem_zona = thrd.BoundedSemaphore(150)
@@ -187,20 +193,15 @@ if __name__ == '__main__':
     p_casa = []
     p_tiro = []
 
-    for i in range(150):
+    for i in range(10):
         t = thrd.Thread(target=parque, args=(i,))
         threads.append(t)
         t.start()
+        print("Thread "+str(i)+" created.\n")
 
     for t in threads:
         t.join()
-
-    file1 = open("ZonaComun.txt","w")
-    file2 = open("MontanaRusa.txt","w")
-    file3 = open("CasaTerror.txt","w")
-    file4 = open("BarcoPirata.txt","w")
-    file5 = open("TiroBlanco.txt","w")
-    file6 = open("Salida.txt","w")
+        print("Threads " +  " joined.\n")
 
     for i in textzonacomun:
         file1.write(i)
