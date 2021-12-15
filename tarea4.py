@@ -64,6 +64,7 @@ def montana_rusa(p):
                 time.sleep(5)
                 p_montana = []
                 sem_montana.release()
+                return 1
 
 
 
@@ -86,6 +87,7 @@ def casa_terrorifica(p):
                 time.sleep(3)
                 p_casa = []
                 sem_casa.release()    
+                return 1
 
 def barco_pirata(p):
     t_fila = datetime.now().strftime("%H:%M:%S")
@@ -106,6 +108,7 @@ def barco_pirata(p):
                 time.sleep(7)
                 p_barco = []
                 sem_barco.release()
+                return 1
 
 
 def tiro_al_blanco(p):
@@ -127,26 +130,33 @@ def tiro_al_blanco(p):
                 time.sleep(7)
                 p_tiro = []
                 sem_tiro.release()
+                return 1
 
 def parque(i):
     t_juego = datetime.now().strftime("%H:%M:%S")
     global textzonacomun
+    global textsalida
     p = Persona(i+1)
     lockC.acquire()
     juego = zona_comun(p)
     if juego == "montaña rusa":
+        textzonacomun[i] += t_juego
+        lockC.release()
         montana_rusa(p)
-        textzonacomun[i] += t_juego
     elif juego == "casa de terror":
+        textzonacomun[i] += t_juego
+        lockC.release()
         casa_terrorifica(p)
-        textzonacomun[i] += t_juego
     elif juego == "barco pirata":
+        textzonacomun[i] += t_juego
+        lockC.release()
         barco_pirata(p)
-        textzonacomun[i] += t_juego
     else:
-        tiro_al_blanco(p)
         textzonacomun[i] += t_juego
-    lockC.release()
+        lockC.release()
+        tiro_al_blanco(p)
+
+    textsalida.append(p.nombre+", "+datetime.now().time())
     
     
     
