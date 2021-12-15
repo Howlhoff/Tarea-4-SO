@@ -24,7 +24,7 @@ textsalida = []
 class Persona:
 
     id = 0
-    nombre = "Persona"+id
+    nombre = "Persona"+str(id)
     eleccion = ""
 
     def __init__(self,id):
@@ -170,3 +170,10 @@ if __name__ == '__main__':
     
     for i in textsalida:
         file6.write(i)
+
+    file1.close()
+    file2.close()
+    file3.close()
+    file4.close()
+    file5.close()
+    file6.close()
