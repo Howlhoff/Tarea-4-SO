@@ -164,9 +164,6 @@ def parque(i):
 
 if __name__ == '__main__':
 
-    for i in range(150):
-        threads.append(thrd.Thread(target=parque, args=(i,)))
-
 
     sem_zona = thrd.BoundedSemaphore(150)
     sem_montana = thrd.BoundedSemaphore(10)
@@ -189,6 +186,12 @@ if __name__ == '__main__':
     p_barco = []
     p_casa = []
     p_tiro = []
+
+    for i in range(150):
+        threads.append(thrd.Thread(target=parque, args=(i,)))
+
+    for t in threads:
+        t.join()
 
     file1 = open("ZonaComun.txt","w")
     file2 = open("MontanaRusa.txt","w")
