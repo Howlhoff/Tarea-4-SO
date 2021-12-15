@@ -82,7 +82,7 @@ def casa_terrorifica(p):
                 lock1.release()
                 while(len(p_casa)>=2):
                     sem_casa.acquire()
-                textcasa.append(p.nombre+", "+t_fila+", "+datetime.now().strftime("%H:%M:%S"))
+                file3.write(p.nombre+", "+t_fila+", "+datetime.now().strftime("%H:%M:%S"))
                 p_casa.append(p)
                 time.sleep(3)
                 p_casa = []
@@ -103,7 +103,7 @@ def barco_pirata(p):
                 lock2.release()
                 while(len(p_barco)>=5):
                     sem_barco.acquire()
-                textbarco.append(p.nombre+", "+t_fila+", "+datetime.now().strftime("%H:%M:%S"))
+                file4.write(p.nombre+", "+t_fila+", "+datetime.now().strftime("%H:%M:%S"))
                 p_barco.append(p)
                 time.sleep(7)
                 p_barco = []
@@ -125,7 +125,7 @@ def tiro_al_blanco(p):
                 lock3.release()
                 while(len(p_tiro)>=1):
                     sem_tiro.acquire()
-                textblanco.append(p.nombre+", "+t_fila+", "+datetime.now().strftime("%H:%M:%S"))
+                file5.write(p.nombre+", "+t_fila+", "+datetime.now().strftime("%H:%M:%S"))
                 p_tiro.append(p)
                 time.sleep(7)
                 p_tiro = []
@@ -199,9 +199,6 @@ if __name__ == '__main__':
         t.start()
         print("Thread "+str(i)+" created.\n")
 
-    for t in threads:
-        t.join()
-        print("Threads " +  " joined.\n")
 
     for i in textzonacomun:
         file1.write(i)
