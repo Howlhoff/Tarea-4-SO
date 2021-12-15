@@ -199,6 +199,10 @@ if __name__ == '__main__':
         t.start()
         print("Thread "+str(i)+" created.\n")
 
+    for t in threads:
+        t.join()
+        print("Threads " +  " joined.\n")
+
 
     for i in textzonacomun:
         file1.write(i)
