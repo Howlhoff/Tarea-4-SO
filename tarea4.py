@@ -33,20 +33,24 @@ class Persona:
     def eleccion(self):
         elecciones = ["montaña rusa", "casa de terror", "barco pirata", "tiro al blanco"]
         self.eleccion = rd.choice(elecciones)
+        return self.eleccion
 
 
 def zona_comun(p):
     global textzonacomun
     sem_zona.acquire()
-    juego = p.eleccion(p)
-    textzonacomun.append(p.nombre+","+datetime.now().time()+","+juego+",")
+    juego = p.eleccion()
+    textzonacomun.append(p.nombre+", "+datetime.now().time()+", "+juego+", ")
     return juego
 
 
 def montana_rusa(p):
+    t_fila = datetime.now().strftime("%H:%M:%S")
+
     global montana
     global p_montana
     global textmontana
+
     while(True):
         if not lock0.locked():
             if montana == 1:
@@ -55,7 +59,7 @@ def montana_rusa(p):
                 lock0.release()
                 while(len(p_montana)>=10):
                     sem_montana.acquire()
-                textmontana.append(p.nombre+","+datetime.now().time())
+                textmontana.append(p.nombre+", "+t_fila+", "+datetime.now().time())
                 p_montana.append(p)
                 time.sleep(5)
                 p_montana = []
@@ -64,6 +68,8 @@ def montana_rusa(p):
 
 
 def casa_terrorifica(p):
+    t_fila = datetime.now().strftime("%H:%M:%S")
+
     global casa
     global p_casa
     global textcasa
@@ -75,13 +81,15 @@ def casa_terrorifica(p):
                 lock1.release()
                 while(len(p_casa)>=2):
                     sem_casa.acquire()
-                textcasa.append(p.nombre+","+datetime.now().time())
+                textcasa.append(p.nombre+", "+t_fila+", "+datetime.now().time())
                 p_casa.append(p)
                 time.sleep(3)
                 p_casa = []
                 sem_casa.release()    
 
 def barco_pirata(p):
+    t_fila = datetime.now().strftime("%H:%M:%S")
+
     global barco
     global p_barco
     global textbarco
@@ -93,7 +101,7 @@ def barco_pirata(p):
                 lock2.release()
                 while(len(p_barco)>=5):
                     sem_barco.acquire()
-                textbarco.append(p.nombre+","+datetime.now().time())
+                textbarco.append(p.nombre+", "+t_fila+", "+datetime.now().time())
                 p_barco.append(p)
                 time.sleep(7)
                 p_barco = []
@@ -101,6 +109,8 @@ def barco_pirata(p):
 
 
 def tiro_al_blanco(p):
+    t_fila = datetime.now().strftime("%H:%M:%S")
+    
     global tiro
     global p_tiro
     global textblanco
@@ -112,17 +122,34 @@ def tiro_al_blanco(p):
                 lock3.release()
                 while(len(p_tiro)>=1):
                     sem_tiro.acquire()
-                textblanco.append(p.nombre+","+datetime.now().time())
+                textblanco.append(p.nombre+", "+t_fila+", "+datetime.now().time())
                 p_tiro.append(p)
                 time.sleep(7)
                 p_tiro = []
                 sem_tiro.release()
 
 def parque(i):
+    t_juego = datetime.now().strftime("%H:%M:%S")
+    global textzonacomun
     p = Persona(i+1)
+    lockC.acquire()
     juego = zona_comun(p)
     if juego == "montaña rusa":
         montana_rusa(p)
+        textzonacomun[i] += t_juego
+    elif juego == "casa de terror":
+        casa_terrorifica(p)
+        textzonacomun[i] += t_juego
+    elif juego == "barco pirata":
+        barco_pirata(p)
+        textzonacomun[i] += t_juego
+    else:
+        tiro_al_blanco(p)
+        textzonacomun[i] += t_juego
+    lockC.release()
+    
+    
+    
 
 if __name__ == '__main__':
 
@@ -140,6 +167,7 @@ if __name__ == '__main__':
     lock1 = thrd.Lock()
     lock2 = thrd.Lock()
     lock3 = thrd.Lock()
+    lockC = thrd.Lock()
 
     montana = 0
     casa = 0
