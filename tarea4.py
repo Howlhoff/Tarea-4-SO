@@ -188,7 +188,9 @@ if __name__ == '__main__':
     p_tiro = []
 
     for i in range(150):
-        threads.append(thrd.Thread(target=parque, args=(i,)))
+        t = thrd.Thread(target=parque, args=(i,))
+        threads.append(t)
+        t.start()
 
     for t in threads:
         t.join()
