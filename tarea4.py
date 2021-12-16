@@ -1,7 +1,7 @@
 import threading
 import random
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 global f_ZonaComun
@@ -34,7 +34,6 @@ class Juego:
 
 
     def jugar(self,p,time_in):
-        print(p.nombre+" has entered queue for "+self.nombre+"\n")
         s_juego = threading.BoundedSemaphore(self.capacidadJuego)
 
         s_juego.acquire()
@@ -161,7 +160,6 @@ def t_persona(i):
         TiroBlanco.jugar(p,time_in)
         s_FilaTB.release()
     # Persona termina el juego
-    print(p.nombre+" out of game, is leaving\n")
 
     # Persona sale del parque
     lockS.acquire()
